@@ -1,6 +1,8 @@
-# public-writing
+# dadeumi (다듬이)
 
 Claude Code가 다른 사람이 읽을 한국어 글을 쓸 때 거치는 작성 흐름을 담은 skill입니다. README, 사내 위키 문서, 블로그 글, 메일, 슬랙 메시지처럼 사용자 본인이 아닌 사람이 읽는 글이면 Claude는 문서 유형 정하기 → 정보 구조 만들기 → AI 말투 제거 → 문장 다듬기 순서로 씁니다.
+
+이름은 천을 여러 번 두드려 구김을 펴는 다듬이질에서 따왔습니다. 글 하나를 이 네 단계에 걸쳐 여러 번 손본다는 뜻입니다.
 
 이 skill은 공개 자료 두 가지를 합쳐 만들었습니다. 문서 유형·정보 구조·문장 다듬기 단계는 토스 [테크니컬 라이팅 가이드](https://technical-writing.dev/)의 프롬프트를, AI 말투 제거 단계는 [im-not-ai](https://github.com/epoko77-ai/im-not-ai)의 규칙과 변경률 게이트를 씁니다.
 
@@ -31,8 +33,8 @@ AI 말투 제거는 문장 다듬기보다 먼저 합니다.
 Claude Code에서 다음 명령을 실행합니다.
 
 ```
-/plugin marketplace add jelitz/public-writing
-/plugin install public-writing@public-writing
+/plugin marketplace add jelitz/dadeumi-korean-writing
+/plugin install dadeumi@dadeumi
 ```
 
 ### 직접 복사
@@ -40,22 +42,22 @@ Claude Code에서 다음 명령을 실행합니다.
 플러그인을 쓰지 않는 경우 skill 폴더를 `~/.claude/skills/`에 복사하면 됩니다.
 
 ```bash
-git clone https://github.com/jelitz/public-writing.git
-cp -r public-writing/skills/public-writing ~/.claude/skills/
+git clone https://github.com/jelitz/dadeumi-korean-writing.git
+cp -r dadeumi-korean-writing/skills/dadeumi ~/.claude/skills/
 ```
 
 ## 사용하기
 
-설치한 뒤에는 Claude가 남이 읽을 글을 쓰는 상황이라고 판단하면 skill을 불러옵니다. 직접 호출하고 싶다면 플러그인 설치 시 `/public-writing:public-writing`, 직접 복사 시 `/public-writing`을 입력하면 됩니다.
+설치한 뒤에는 Claude가 남이 읽을 글을 쓰는 상황이라고 판단하면 skill을 불러옵니다. 직접 호출하고 싶다면 플러그인 설치 시 `/dadeumi:dadeumi`, 직접 복사 시 `/dadeumi`를 입력하면 됩니다.
 
 ```
-/public-writing 이번 분기 배포 일정 변경을 팀 채널에 공지할 글을 써 줘
+/dadeumi 이번 분기 배포 일정 변경을 팀 채널에 공지할 글을 써 줘
 ```
 
 3단계의 변경률 게이트는 단독으로도 실행할 수 있습니다. 원문과 수정본을 비교해 변경률이 30% 미만이면 통과, 30~50%면 경고, 50% 이상이면 중단으로 판정합니다.
 
 ```bash
-python3 skills/public-writing/scripts/change_rate.py --before before.md --after after.md
+python3 skills/dadeumi/scripts/change_rate.py --before before.md --after after.md
 ```
 
 Windows에서는 `python3` 대신 `python`으로 실행합니다.
@@ -77,7 +79,7 @@ Windows에서는 `python3` 대신 `python`으로 실행합니다.
 ## 파일 구성
 
 ```
-skills/public-writing/
+skills/dadeumi/
 ├── SKILL.md                       # 흐름 전체와 등급 판정 기준
 ├── references/
 │   ├── 03-humanize.md             # 3단계 절차
