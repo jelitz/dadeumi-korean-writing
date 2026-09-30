@@ -31,7 +31,7 @@
 
 ```bash
 git clone --depth 1 https://github.com/epoko77-ai/im-not-ai.git
-cp im-not-ai/skills/humanize-korean/references/{quick-rules.md,rewriting-playbook.md} skills/public-writing/references/im-not-ai/
+cp im-not-ai/skills/humanize-korean/references/{quick-rules.md,rewriting-playbook.md} skills/dadeumi/references/im-not-ai/
 ```
 
 복사한 뒤 이 파일의 기준 커밋을 고치고, `metrics_v2.py`의 `change_rate()`·임계값이 바뀌었는지 확인한다.

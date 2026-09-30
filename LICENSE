@@ -24,11 +24,11 @@ SOFTWARE.
 
 Third-party files keep their own licenses:
 
-- skills/public-writing/references/im-not-ai/ — MIT, Copyright (c) 2026 epoko77-ai
-- skills/public-writing/scripts/change_rate.py — derived from im-not-ai, MIT
-- skills/public-writing/references/toss/01-doc-type.md, 02-structure.md,
+- skills/dadeumi/references/im-not-ai/ — MIT, Copyright (c) 2026 epoko77-ai
+- skills/dadeumi/scripts/change_rate.py — derived from im-not-ai, MIT
+- skills/dadeumi/references/toss/01-doc-type.md, 02-structure.md,
   04-sentences.md — MIT, Copyright (c) 2024 Viva Republica, Inc
-- skills/public-writing/references/toss/00-core-principles.md — CC BY-NC-SA 4.0,
+- skills/dadeumi/references/toss/00-core-principles.md — CC BY-NC-SA 4.0,
   Copyright (c) 2024 Viva Republica, Inc.
   https://creativecommons.org/licenses/by-nc-sa/4.0/
 
