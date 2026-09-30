@@ -1,0 +1,18 @@
+{
+  "name": "public-writing",
+  "owner": {
+    "name": "jelitz"
+  },
+  "metadata": {
+    "description": "남이 읽을 한국어 글을 위한 Claude Code skill"
+  },
+  "plugins": [
+    {
+      "name": "public-writing",
+      "source": "./",
+      "description": "남이 읽을 한국어 글을 쓸 때 문서 유형 정하기 → 정보 구조 만들기 → AI 말투 제거 → 문장 다듬기 순서를 거치게 하는 skill",
+      "version": "1.0.0",
+      "category": "productivity"
+    }
+  ]
+}
