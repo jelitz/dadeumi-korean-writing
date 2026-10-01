@@ -71,10 +71,36 @@ Windows에서는 `python3` 대신 `python`으로 실행합니다.
 
 표·헤딩·불릿이 많은 문서는 `--ignore-markup`을 붙이면 마크다운 장식을 빼고 본문만 비교합니다.
 
+## 게시 전 자동 확인 hook (선택)
+
+skill은 Claude가 필요하다고 판단할 때만 불려옵니다. 글을 올리는 도구를 호출하기 직전에 skill을 거쳤는지 강제로 확인하려면 `hooks/dadeumi-gate.js`를 hook으로 등록합니다.
+
+| 호출 | hook의 동작 |
+|---|---|
+| Confluence·Jira·Slack 등 게시용 MCP 도구, `gws`로 글을 올리는 명령(docs, slides, gmail 발송, chat, drive 업로드·댓글) | 이 세션에서 최근 60분 안에 `dadeumi` skill을 호출한 기록이 없으면 거부하고, skill을 호출한 뒤 다시 시도하라고 안내 |
+| `gh pr create`, `gh issue comment`, `gh release create` 등 PR·이슈·릴리스 글 | 세션당 한 번만 스크리닝 체크리스트 네 가지와 함께 거부. 같은 명령을 다시 실행하면 통과 |
+
+이 hook은 skill을 불렀는지만 확인하고, 글이 잘 다듬어졌는지는 판단하지 않습니다. hook 자체가 오류를 내면 조용히 통과시키므로 게시를 막는 일은 없습니다.
+
+설정은 세 단계입니다.
+
+1. hook 파일을 복사합니다. 플러그인으로 설치했어도 경로가 바뀔 수 있으니 고정된 위치에 둡니다.
+
+   ```bash
+   mkdir -p ~/.claude/hooks
+   cp hooks/dadeumi-gate.js ~/.claude/hooks/
+   ```
+
+2. `hooks/settings.example.json`의 `hooks` 항목을 `~/.claude/settings.json`에 합칩니다. 이미 `hooks`가 있으면 `PreToolUse`·`PostToolUse` 배열에 항목만 추가합니다.
+3. 첫 번째 `matcher`의 MCP 도구 이름을 자기 환경에 맞게 고칩니다. 예시는 `mcp-atlassian`의 Confluence·Jira 도구와 Slack 커넥터(`mcp__claude_ai_Slack__`) 이름이라, 쓰는 서버가 다르면 `/mcp`나 도구 목록에서 실제 이름(`mcp__<서버>__<도구>`)을 확인해 바꿔야 합니다. `gws`나 `gh`를 쓰지 않으면 두 번째 `matcher` 블록은 빼도 됩니다.
+
+Node.js만 있으면 되고 다른 의존성은 없습니다. 플러그인 skill은 `dadeumi:dadeumi`로 호출되는데, hook은 이 이름도 인식합니다.
+
 ## 요구 사항
 
 - Claude Code
 - Python 3.7 이상 (변경률 스크립트용, 표준 라이브러리만 사용)
+- Node.js (hook을 쓸 때만)
 
 ## 파일 구성
 
@@ -87,6 +113,10 @@ skills/dadeumi/
 │   └── toss/                      # 1·2·4단계 프롬프트와 핵심 원칙
 └── scripts/
     └── change_rate.py             # 변경률 게이트
+
+hooks/
+├── dadeumi-gate.js                # 게시 전 skill 호출 확인 hook (선택)
+└── settings.example.json          # settings.json에 합칠 hook 설정 예시
 ```
 
 ## 출처와 라이선스
