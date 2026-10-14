@@ -2,6 +2,13 @@
 
 이 프로젝트의 눈에 띄는 변경을 기록한다. 형식은 [Keep a Changelog](https://keepachangelog.com/ko/1.1.0/), 버전은 [SemVer](https://semver.org/lang/ko/)를 따른다.
 
+## [1.1.1] - 2026-10-14
+
+### Fixed
+
+- `references/03-humanize.md`: 변경률 스크립트를 찾지 못해 python이 exit 2로 끝난 경우를 "50% 이상 변경"으로 읽지 않도록, 출력에 `change_rate:` 줄이 없으면 판정 불가로 본다는 문장을 더했다.
+- README: 설치 절에서 빠진 빈 줄 두 개를 되살렸다. "확인" 줄이 앞 목록 항목에 붙어 보였다.
+
 ## [1.1.0] - 2026-10-14
 
 ### Added
@@ -31,5 +38,6 @@
 
 - 첫 공개: `dadeumi` skill(문서 유형 정하기 → 정보 구조 만들기 → AI 말투 제거 → 문장 다듬기), 변경률 게이트 `scripts/change_rate.py`, 게시 전 확인 hook `hooks/dadeumi-gate.js`.
 
+[1.1.1]: https://github.com/jelitz/dadeumi-korean-writing/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/jelitz/dadeumi-korean-writing/compare/c010690...v1.1.0
 [1.0.0]: https://github.com/jelitz/dadeumi-korean-writing/commit/c010690

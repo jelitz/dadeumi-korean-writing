@@ -133,7 +133,9 @@ cp -r dadeumi-korean-writing/skills/dadeumi ~/.agents/skills/
 - Cursor: `/dadeumi`로 호출합니다. `~/.cursor/skills/`와 `~/.claude/skills/`에 둔 skill도 읽습니다.
 - Codex CLI·ChatGPT 데스크톱: `$dadeumi`로 호출합니다. 목록에 보이는 표시명과 설명은 `agents/openai.yaml`에 있습니다. Codex는 `$skill-installer`로 이 저장소의 `skills/dadeumi` 경로를 지정해 설치할 수도 있습니다.
 - 참고: Gemini CLI와 GitHub Copilot도 같은 경로를 읽는다고 각 공식 문서가 안내합니다([Gemini CLI](https://geminicli.com/docs/cli/skills/), [GitHub Copilot](https://docs.github.com/en/copilot/concepts/agents/about-agent-skills)).
+
 확인: 2026-10-14, [Cursor skills](https://cursor.com/docs/skills), [Codex skills](https://developers.openai.com/codex/skills), [ChatGPT skills](https://learn.chatgpt.com/docs/build-skills.md).
+
 ### ChatGPT 웹
 
 ChatGPT 웹은 단독 skill 업로드를 지원하지 않습니다(플러그인에 묶인 skill만 읽습니다). 대안으로 Projects의 지침에 `SKILL.md` 본문을 붙여 넣고 `references/` 아래 파일을 프로젝트 파일로 올리면 1·2·4단계와 3단계의 규칙은 쓸 수 있습니다. 변경률 스크립트는 실행할 수 없으므로 3단계의 변경률 게이트는 빠집니다. 확인: 2026-10-14, [ChatGPT skills](https://learn.chatgpt.com/docs/build-skills.md).
