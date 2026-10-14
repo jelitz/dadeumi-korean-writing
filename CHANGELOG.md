@@ -2,6 +2,13 @@
 
 이 프로젝트의 눈에 띄는 변경을 기록한다. 형식은 [Keep a Changelog](https://keepachangelog.com/ko/1.1.0/), 버전은 [SemVer](https://semver.org/lang/ko/)를 따른다.
 
+## [Unreleased]
+
+### Fixed
+
+- README: Slack 결과 예시가 초안의 "불가할 수 있습니다"를 "불가합니다"로 단정하고 "더 안정적인 배포를 기대한다"는 내용을 빠뜨린 것을 바로잡았다. 변경률을 다시 재서 36.3%에서 30.1%(본문만 35.0%에서 28.8%)로 고쳤다.
+- README: claude.ai 설치 절의 코드 실행 설명을 "스크립트가 샌드박스에서 돈다"에서 "스크립트를 실행하려면 필요하다"로 바꿨다. 실제 실행은 확인하지 않았다.
+
 ## [1.1.1] - 2026-10-14
 
 ### Fixed
@@ -38,6 +45,7 @@
 
 - 첫 공개: `dadeumi` skill(문서 유형 정하기 → 정보 구조 만들기 → AI 말투 제거 → 문장 다듬기), 변경률 게이트 `scripts/change_rate.py`, 게시 전 확인 hook `hooks/dadeumi-gate.js`.
 
+[Unreleased]: https://github.com/jelitz/dadeumi-korean-writing/compare/v1.1.1...HEAD
 [1.1.1]: https://github.com/jelitz/dadeumi-korean-writing/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/jelitz/dadeumi-korean-writing/compare/c010690...v1.1.0
 [1.0.0]: https://github.com/jelitz/dadeumi-korean-writing/commit/c010690
