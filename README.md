@@ -127,6 +127,3 @@ hooks/
 |---|---|---|
 | `references/im-not-ai/*`, `scripts/change_rate.py` | [epoko77-ai/im-not-ai](https://github.com/epoko77-ai/im-not-ai) | MIT |
 | `references/toss/01-doc-type.md`, `02-structure.md`, `04-sentences.md` | [toss/frontend-fundamentals](https://github.com/toss/frontend-fundamentals) | MIT |
-| `references/toss/00-core-principles.md` | [toss/technical-writing](https://github.com/toss/technical-writing) | CC BY-NC-SA 4.0 |
-
-`00-core-principles.md`에는 비영리 조건이 붙어 있어서 영리 목적으로 재배포할 때는 이 파일을 빼야 합니다. 이 파일을 고쳐 배포할 때도 CC BY-NC-SA 4.0을 유지해야 합니다. skill은 이 파일이 없어도 동작합니다. 가져온 범위와 변경 내역은 각 폴더의 `NOTICE.md`를 참고하세요.
