@@ -1,0 +1,4 @@
+interface:
+  display_name: "dadeumi (다듬이)"
+  short_description: "남이 읽을 한국어 글을 문서 유형·구조·AI 말투·문장 순서로 다듬습니다"
+  default_prompt: "Use $dadeumi to draft or polish Korean text that other people will read."

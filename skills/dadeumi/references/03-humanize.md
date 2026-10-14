@@ -26,13 +26,13 @@ im-not-ai의 단일 호출 윤문 에이전트(`agents/humanize-monolith.md`)와
 4. 문장별 핵심 내용 명사·개념어(내용 앵커)를 먼저 잡는다. 앵커의 원형 어휘는 결과에 최소 한 번 그대로 남아야 한다.
 5. 패턴을 탐지하고 문단 단위로 윤문한다. 순서: D(관용구 삭제) → A → I → G → H → F → B → C·J → E. 처방이 애매하면 `im-not-ai/rewriting-playbook.md`에서 해당 카테고리 절만 읽는다(장르별 미세 조정은 §4).
 6. `quick-rules.md` 말미의 자체검증 6항을 점검한다. 위반 항목은 해당 수정을 되돌리고 그 부분만 1회 다시 윤문한다.
-7. 윤문본을 `pw-after.md`로 저장하고 Bash 도구로 변경률 게이트를 실행한다.
+7. 윤문본을 `pw-after.md`로 저장하고 셸에서 변경률 게이트를 실행한다.
 
    ```bash
    python3 <skill 폴더>/scripts/change_rate.py --before <경로>/pw-before.md --after <경로>/pw-after.md
    ```
 
-   `<skill 폴더>`는 skill을 불러올 때 표시되는 base directory다. `python3`이 없는 환경(Windows 등)에서는 `python`으로 실행한다. 표·헤딩·불릿이 많은 문서는 `--ignore-markup`을 붙여 본문만 비교한다.
+   `<skill 폴더>`는 이 skill의 SKILL.md가 있는 폴더다 — 셸의 현재 디렉터리 기준이 아니다. Claude Code는 SKILL.md 3단계에 적힌 `${CLAUDE_SKILL_DIR}`를 그 폴더의 절대 경로로 치환하므로 그 값을 쓴다(skill을 불러올 때 표시되는 base directory와 같다). 치환이 없는 환경(claude.ai, Cursor, Codex 등)에서는 SKILL.md의 위치를 확인해 그 폴더의 `scripts/change_rate.py`를 쓴다. `python3`이 없는 환경(Windows 등)에서는 `python`으로 실행한다. 표·헤딩·불릿이 많은 문서는 `--ignore-markup`을 붙여 본문만 비교한다.
 
 | exit | 판정 | 후속 |
 |---|---|---|

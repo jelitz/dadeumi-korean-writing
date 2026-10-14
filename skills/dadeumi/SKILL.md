@@ -1,6 +1,8 @@
 ---
 name: dadeumi
-description: 사용자 본인이 아닌 사람이 읽게 될 글을 쓰기 전에 사용 — 기준은 독자이고, 글이 나가는 도구·경로나 길이는 기준이 아니다. 문서 유형 정하기 → 정보 구조 만들기 → AI 말투 제거(윤문) → 문장 다듬기 순서를 거친다. 예 — Confluence·Jira·Slack 게시, Google Docs·메일(gws), README·개발 문서, 블로그, 레포트, 민원·탄원서, 카카오톡·문자 메시지.
+description: 사용자 본인이 아닌 사람이 읽게 될 글을 쓰기 전에 사용 — 기준은 독자이고, 글이 나가는 도구·경로나 길이는 기준이 아니다. 문서 유형 정하기 → 정보 구조 만들기 → AI 말투 제거(윤문) → 문장 다듬기 순서를 거친다. 예 — Confluence·Jira·Slack 게시, Google Docs·메일(gws), README·개발 문서, 블로그, 레포트, 민원·탄원서, 카카오톡·문자 메시지. 게시 도구나 명령이 dadeumi-gate hook에 막혔을 때도 사용.
+license: MIT
+compatibility: Python 3 표준 라이브러리와 셸(change_rate.py 실행용). hooks/는 Claude Code 전용.
 ---
 
 # dadeumi (다듬이) — 남이 읽을 글 쓰기 흐름
@@ -58,7 +60,7 @@ description: 사용자 본인이 아닌 사람이 읽게 될 글을 쓰기 전�
 
 ### 3단계. AI 말투 제거
 
-`references/03-humanize.md`의 절차를 따른다. 초안 저장 → `quick-rules.md` 읽기 → 윤문 → 자체검증 6항 → 변경률 게이트(`scripts/change_rate.py`) 순이다. 변경률은 스크립트 출력값만 쓴다.
+`references/03-humanize.md`의 절차를 따른다. 초안 저장 → `quick-rules.md` 읽기 → 윤문 → 자체검증 6항 → 변경률 게이트(`${CLAUDE_SKILL_DIR}/scripts/change_rate.py`) 순이다. 변경률은 스크립트 출력값만 쓴다.
 
 ### 4단계. 문장 다듬기
 
@@ -83,7 +85,7 @@ description: 사용자 본인이 아닌 사람이 읽게 될 글을 쓰기 전�
 
 두세 문단을 넘으면 `references/im-not-ai/quick-rules.md`를 읽고 전체 흐름의 3·4단계를 적용한다.
 
-## 게시 도구가 hook에 막혔을 때
+## (Claude Code 전용) 게시 도구가 hook에 막혔을 때
 
 저장소의 `hooks/dadeumi-gate.js`를 hook으로 등록했다면, 글을 올리는 도구가 "dadeumi skill을 거쳐야 합니다"라는 사유로 거부될 수 있다. 이때는 Skill 도구로 `dadeumi`를 호출하고, 올리려던 글이 이 흐름을 거쳤는지 확인한 뒤(안 거쳤으면 지금 거친다) 같은 호출을 다시 시도한다. 다른 경로로 우회하지 않는다.
 
