@@ -1,0 +1,45 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.9", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python -m unittest discover -s tests -p "test_*.py" -v
+
+  node:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: node --test "tests/**/*.test.js"
+
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: skills-ref validate (Agent Skills spec)
+        run: pipx run --spec "git+https://github.com/agentskills/agentskills#subdirectory=skills-ref" skills-ref validate skills/dadeumi
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm i -g @anthropic-ai/claude-code
+      - name: claude plugin validate (strict)
+        run: |
+          claude plugin validate --strict .
+          claude plugin validate --strict .claude-plugin/plugin.json
