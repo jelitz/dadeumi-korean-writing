@@ -1,0 +1,49 @@
+name: release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check that the tag matches plugin.json version
+        id: version
+        run: |
+          version=$(jq -r .version .claude-plugin/plugin.json)
+          if [ "v$version" != "$GITHUB_REF_NAME" ]; then
+            echo "::error::tag $GITHUB_REF_NAME does not match .claude-plugin/plugin.json version $version"
+            exit 1
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Extract release notes from CHANGELOG.md
+        run: |
+          bash scripts/release-notes.sh "${{ steps.version.outputs.version }}" > notes.md
+          cat notes.md
+
+      - name: Build the claude.ai upload zip
+        run: |
+          version="${{ steps.version.outputs.version }}"
+          ( cd skills && zip -r "../dadeumi-${version}.zip" dadeumi -x '*/__pycache__/*' )
+          if unzip -Z1 "dadeumi-${version}.zip" | grep -v '^dadeumi/'; then
+            echo "::error::zip contains entries outside dadeumi/"
+            exit 1
+          fi
+          unzip -l "dadeumi-${version}.zip"
+
+      - name: Create the GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            --title "$GITHUB_REF_NAME" \
+            --notes-file notes.md \
+            --verify-tag \
+            "dadeumi-${{ steps.version.outputs.version }}.zip"
