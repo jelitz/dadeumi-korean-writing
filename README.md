@@ -1,6 +1,6 @@
 # dadeumi (다듬이)
 
-dadeumi is an Agent Skill that makes an AI assistant write Korean text the way a careful colleague would when someone else is going to read it. It walks through five steps — pick the document type, outline the structure, draft, strip AI-sounding phrasing, then tighten each sentence — and ships a script that measures how much the edit changed the original. One `skills/dadeumi/` folder runs in Claude Code (as a plugin), in claude.ai and Claude Desktop (zip upload), and in Cursor, Codex CLI and ChatGPT Desktop (one shared skills directory). The whole repository is MIT licensed.
+dadeumi is an Agent Skill that makes an AI assistant write Korean text the way a careful colleague would when someone else is going to read it. It walks through five steps — pick the document type, outline the structure, draft, strip AI-sounding phrasing, then tighten each sentence — and ships a script that measures how much the edit changed the original. One `skills/dadeumi/` folder runs in Claude Code (as a plugin), in claude.ai and Claude Desktop (as a plugin added from this repository, or by zip upload), and in Cursor, Codex CLI and ChatGPT Desktop (one shared skills directory). The whole repository is MIT licensed.
 
 AI가 다른 사람이 읽을 한국어 글을 쓸 때 거치는 작성 흐름을 담은 skill입니다. README, 사내 위키 문서, 블로그 글, 메일, 슬랙 메시지처럼 사용자 본인이 아닌 사람이 읽는 글이면 문서 유형 정하기 → 정보 구조 만들기 → AI 말투 제거 → 문장 다듬기 순서로 씁니다.
 
@@ -106,11 +106,19 @@ cp -r dadeumi-korean-writing/skills/dadeumi ~/.claude/skills/
 
 ### claude.ai · Claude 데스크톱
 
-1. [최신 Release](https://github.com/jelitz/dadeumi-korean-writing/releases/latest)에서 `dadeumi-<version>.zip`을 내려받습니다. zip 안의 폴더명은 `dadeumi`입니다.
-2. Settings > Capabilities에서 코드 실행을 켭니다. 3단계의 변경률 스크립트가 이 샌드박스에서 돕니다.
-3. Customize > Skills > + > Create skill > Upload a skill에서 zip을 올립니다.
+이 저장소를 플러그인 마켓플레이스로 추가해 설치합니다.
 
-확인: 2026-10-14, [Use skills in Claude](https://support.claude.com/en/articles/12512180-use-skills-in-claude), [How to create custom skills](https://support.claude.com/en/articles/12512198-how-to-create-custom-skills).
+1. Settings > Capabilities에서 코드 실행을 켭니다. 3단계의 변경률 스크립트가 이 샌드박스에서 돕니다.
+2. Customize > Plugins > Add > Add marketplace에 `jelitz/dadeumi-korean-writing`을 입력합니다.
+3. 목록에 나타난 `dadeumi`를 골라 Add를 누릅니다.
+
+남이 읽을 글을 요청하면 Claude가 skill을 불러옵니다. 직접 고르려면 메시지 입력란에 `/`를 치고 `dadeumi`를 찾습니다. 새 버전은 Check for updates로 받고, Sync automatically를 켜 두면 자동으로 받습니다.
+
+플러그인은 계정에 저장되므로 Cowork에서도 따로 설치하지 않고 씁니다. 같은 계정으로 로그인한 Claude Code(v2.1.273 이상)에는 `dadeumi@synced`로 동기화됩니다. 이미 `dadeumi@dadeumi`를 설치해 두었다면 그쪽이 로드되고 동기화본은 로드되지 않습니다. Team·Enterprise 플랜에서는 Owner가 마켓플레이스 직접 추가를 막아 두었을 수 있습니다.
+
+수동 설치(선택): 마켓플레이스를 쓸 수 없으면 [최신 Release](https://github.com/jelitz/dadeumi-korean-writing/releases/latest)에서 `dadeumi-<version>.zip`을 내려받아 Customize > Skills > + > Create skill > Upload a skill에 올립니다. zip 안의 폴더명은 `dadeumi`입니다. 이렇게 올린 skill은 자동으로 갱신되지 않으므로 새 버전이 나오면 다시 올립니다. 코드 실행은 이때도 켜야 합니다.
+
+확인: 2026-10-14, [Plugins](https://claude.com/docs/plugins/overview), [Plugin feature support across platforms](https://claude.com/docs/plugins/platform-support), [Use skills in Claude](https://support.claude.com/en/articles/12512180-use-skills-in-claude), [How to create custom skills](https://support.claude.com/en/articles/12512198-how-to-create-custom-skills).
 
 ### Cursor · Codex CLI · ChatGPT 데스크톱
 
@@ -124,10 +132,8 @@ cp -r dadeumi-korean-writing/skills/dadeumi ~/.agents/skills/
 
 - Cursor: `/dadeumi`로 호출합니다. `~/.cursor/skills/`와 `~/.claude/skills/`에 둔 skill도 읽습니다.
 - Codex CLI·ChatGPT 데스크톱: `$dadeumi`로 호출합니다. 목록에 보이는 표시명과 설명은 `agents/openai.yaml`에 있습니다. Codex는 `$skill-installer`로 이 저장소의 `skills/dadeumi` 경로를 지정해 설치할 수도 있습니다.
-- 참고: Gemini CLI와 GitHub Copilot도 같은 경로를 읽는다고 각 공식 문서가 안내합니다([Gemini CLI](https://geminicli.com/docs/cli/skills/), [GitHub Copilot](https://docs.github.com/en/copilot/concepts/agents/about-agent-skills)). 이 두 도구에서는 동작을 확인하지 않았습니다.
-
+- 참고: Gemini CLI와 GitHub Copilot도 같은 경로를 읽는다고 각 공식 문서가 안내합니다([Gemini CLI](https://geminicli.com/docs/cli/skills/), [GitHub Copilot](https://docs.github.com/en/copilot/concepts/agents/about-agent-skills)).
 확인: 2026-10-14, [Cursor skills](https://cursor.com/docs/skills), [Codex skills](https://developers.openai.com/codex/skills), [ChatGPT skills](https://learn.chatgpt.com/docs/build-skills.md).
-
 ### ChatGPT 웹
 
 ChatGPT 웹은 단독 skill 업로드를 지원하지 않습니다(플러그인에 묶인 skill만 읽습니다). 대안으로 Projects의 지침에 `SKILL.md` 본문을 붙여 넣고 `references/` 아래 파일을 프로젝트 파일로 올리면 1·2·4단계와 3단계의 규칙은 쓸 수 있습니다. 변경률 스크립트는 실행할 수 없으므로 3단계의 변경률 게이트는 빠집니다. 확인: 2026-10-14, [ChatGPT skills](https://learn.chatgpt.com/docs/build-skills.md).

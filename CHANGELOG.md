@@ -8,10 +8,10 @@
 
 - `evals/`: 발동 정확도 eval 11케이스(양성 6·음성 5)와 변경 전 기준선 `tests/eval/baseline-c010690.json`.
 - `tests/`: `change_rate.py` 단위 테스트(Python unittest)와 `dadeumi-gate.js` 동작 테스트(node:test).
-- GitHub Actions: `ci.yml`(테스트, `claude plugin validate`, `skills-ref validate`)과 `release.yml`(`v*` 태그 push 시 Release 생성, claude.ai 업로드용 `dadeumi-<version>.zip` 첨부).
+- GitHub Actions: `ci.yml`(테스트, `claude plugin validate`, `skills-ref validate`)과 `release.yml`(`v*` 태그 push 시 Release 생성, claude.ai 수동 업로드용 `dadeumi-<version>.zip` 첨부).
 - `skills/dadeumi/agents/openai.yaml`: Codex CLI·ChatGPT 데스크톱의 skill 목록 표시용.
 - `THIRD-PARTY-NOTICES.md`: 가져온 파일의 저작자와 라이선스 고지.
-- README: 영문 요약, 결과 예시 2건(변경률 포함), claude.ai·Cursor·Codex CLI·ChatGPT 설치 안내.
+- README: 영문 요약, 결과 예시 2건(변경률 포함), claude.ai·Cursor·Codex CLI·ChatGPT 설치 안내. claude.ai는 이 저장소를 플러그인 마켓플레이스로 추가하는 방법을 기본으로 안내하고, zip 업로드는 수동 설치로 남겼다.
 
 ### Changed
 
