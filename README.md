@@ -1,6 +1,8 @@
 # dadeumi (다듬이)
 
-Claude Code가 다른 사람이 읽을 한국어 글을 쓸 때 거치는 작성 흐름을 담은 skill입니다. README, 사내 위키 문서, 블로그 글, 메일, 슬랙 메시지처럼 사용자 본인이 아닌 사람이 읽는 글이면 Claude는 문서 유형 정하기 → 정보 구조 만들기 → AI 말투 제거 → 문장 다듬기 순서로 씁니다.
+dadeumi is an Agent Skill that makes an AI assistant write Korean text the way a careful colleague would when someone else is going to read it. It walks through five steps — pick the document type, outline the structure, draft, strip AI-sounding phrasing, then tighten each sentence — and ships a script that measures how much the edit changed the original. One `skills/dadeumi/` folder runs in Claude Code (as a plugin), in claude.ai and Claude Desktop (zip upload), and in Cursor, Codex CLI and ChatGPT Desktop (one shared skills directory). The whole repository is MIT licensed.
+
+AI가 다른 사람이 읽을 한국어 글을 쓸 때 거치는 작성 흐름을 담은 skill입니다. README, 사내 위키 문서, 블로그 글, 메일, 슬랙 메시지처럼 사용자 본인이 아닌 사람이 읽는 글이면 문서 유형 정하기 → 정보 구조 만들기 → AI 말투 제거 → 문장 다듬기 순서로 씁니다.
 
 이름은 천을 여러 번 두드려 구김을 펴는 다듬이질에서 따왔습니다. 글 하나를 이 네 단계에 걸쳐 여러 번 손본다는 뜻입니다.
 
@@ -26,29 +28,113 @@ Claude Code가 다른 사람이 읽을 한국어 글을 쓸 때 거치는 작성
 
 AI 말투 제거는 문장 다듬기보다 먼저 합니다.
 
+## 결과 예시
+
+두 예시 모두 일부러 AI 말투로 쓴 초안을 이 skill의 흐름으로 고친 것입니다. 변경률은 `scripts/change_rate.py`가 출력한 값 그대로입니다.
+
+### Slack 메시지 (간이 흐름)
+
+초안:
+
+```text
+안녕하세요 팀 여러분! 📢 다음 주 배포 일정 변경 사항에 대해 안내드립니다.
+
+**변경 내용**
+- 기존: 10/21(화) 오전 10시
+- 변경: 10/23(목) 오후 2시
+
+**변경 사유**
+QA 일정 지연으로 인해 부득이하게 배포 일정이 조정되었습니다. 이를 통해 보다 안정적인 배포가 가능할 것으로 기대됩니다.
+
+**참고 사항**
+- 배포 중 약 10분간 관리자 페이지 접속이 불가할 수 있습니다.
+- 관련하여 문의 사항이 있으시면 언제든지 편하게 말씀해 주세요!
+
+감사합니다. 🙏
+```
+
+결과:
+
+```text
+다음 주 배포 일정을 안내드립니다.
+
+기존: 10/21(화) 오전 10시
+변경: 10/23(목) 오후 2시
+
+QA 일정이 지연되어 배포 일정을 조정했습니다. 배포 중 약 10분간 관리자 페이지 접속이 불가합니다. 문의 사항이 있으면 말씀해 주세요.
+```
+
+변경률 36.3% (`--ignore-markup`으로 본문만 비교하면 35.0%). 경고 구간(30~50%)이라 바뀐 곳을 사용자에게 알리고 진행하는 경우입니다. 주요 변경: 인사·이모지·굵은 소제목 삭제, "~에 대해 안내드립니다"·"이를 통해 ~ 기대됩니다" 같은 번역투와 완곡 표현 제거, 날짜·시간·"약 10분" 유지.
+
+### 문서 단락 (전체 흐름 3·4단계)
+
+초안:
+
+```text
+본 문서에서는 상담 시스템 로그 보존 기간 변경에 대해 설명합니다. 기존에는 로그가 30일간 보존되었으나, 스토리지 비용 증가 문제를 해결하기 위해 보존 기간을 7일로 단축하게 되었습니다. 이를 통해 월 약 120GB의 스토리지 사용량을 절감할 수 있을 것으로 기대되며, 매우 중요한 변화라고 할 수 있습니다. 다만, 7일이 지난 로그는 더 이상 조회가 불가능하다는 점에서 주의가 필요합니다. 장애 분석 등을 위해 로그가 필요한 경우에는 반드시 7일 이내에 Datadog에서 내보내기를 수행해야 합니다. 결론적으로, 이번 변경을 통해 비용 효율성과 운영 안정성을 동시에 확보할 수 있을 것으로 보입니다.
+```
+
+결과:
+
+```text
+이 문서는 상담 시스템 로그 보존 기간 변경을 설명합니다. 로그는 30일간 보존했으나, 스토리지 비용 증가 문제를 해결하기 위해 보존 기간을 7일로 단축했습니다. 월 약 120GB의 스토리지 사용량을 절감할 것으로 기대합니다. 7일이 지난 로그는 조회할 수 없으므로, 장애 분석 등에 로그가 필요한 경우에는 반드시 7일 이내에 Datadog에서 내보내야 합니다.
+```
+
+변경률 30.2%. 주요 변경: "결론적으로 ~ 확보할 수 있을 것으로 보입니다" 결산 문장과 "매우 중요한 변화" 삭제, "~할 수 있을 것으로 기대되며" 같은 겹친 완곡 표현을 하나로, "30일"·"7일"·"120GB"·"Datadog" 유지.
+
 ## 설치
 
-### 플러그인으로 설치
+skill 폴더는 `skills/dadeumi/` 하나입니다. 도구에 따라 두는 위치만 다릅니다.
 
-Claude Code에서 다음 명령을 실행합니다.
+### Claude Code
+
+플러그인으로 설치합니다.
 
 ```
 /plugin marketplace add jelitz/dadeumi-korean-writing
 /plugin install dadeumi@dadeumi
 ```
 
-### 직접 복사
-
-플러그인을 쓰지 않는 경우 skill 폴더를 `~/.claude/skills/`에 복사하면 됩니다.
+플러그인을 쓰지 않으면 skill 폴더를 `~/.claude/skills/`에 복사합니다.
 
 ```bash
 git clone https://github.com/jelitz/dadeumi-korean-writing.git
 cp -r dadeumi-korean-writing/skills/dadeumi ~/.claude/skills/
 ```
 
+호출은 플러그인 설치 시 `/dadeumi:dadeumi`, 직접 복사 시 `/dadeumi`입니다. 확인: 2026-10-14, [Claude Code 플러그인 설치 문서](https://code.claude.com/docs/en/plugins/install).
+
+### claude.ai · Claude 데스크톱
+
+1. [최신 Release](https://github.com/jelitz/dadeumi-korean-writing/releases/latest)에서 `dadeumi-<version>.zip`을 내려받습니다. zip 안의 폴더명은 `dadeumi`입니다.
+2. Settings > Capabilities에서 코드 실행을 켭니다. 3단계의 변경률 스크립트가 이 샌드박스에서 돕니다.
+3. Customize > Skills > + > Create skill > Upload a skill에서 zip을 올립니다.
+
+확인: 2026-10-14, [Use skills in Claude](https://support.claude.com/en/articles/12512180-use-skills-in-claude), [How to create custom skills](https://support.claude.com/en/articles/12512198-how-to-create-custom-skills).
+
+### Cursor · Codex CLI · ChatGPT 데스크톱
+
+세 도구가 공통으로 읽는 `~/.agents/skills/`에 한 벌만 복사합니다.
+
+```bash
+git clone https://github.com/jelitz/dadeumi-korean-writing.git
+mkdir -p ~/.agents/skills
+cp -r dadeumi-korean-writing/skills/dadeumi ~/.agents/skills/
+```
+
+- Cursor: `/dadeumi`로 호출합니다. `~/.cursor/skills/`와 `~/.claude/skills/`에 둔 skill도 읽습니다.
+- Codex CLI·ChatGPT 데스크톱: `$dadeumi`로 호출합니다. 목록에 보이는 표시명과 설명은 `agents/openai.yaml`에 있습니다. Codex는 `$skill-installer`로 이 저장소의 `skills/dadeumi` 경로를 지정해 설치할 수도 있습니다.
+- 참고: Gemini CLI와 GitHub Copilot도 같은 경로를 읽는다고 각 공식 문서가 안내합니다([Gemini CLI](https://geminicli.com/docs/cli/skills/), [GitHub Copilot](https://docs.github.com/en/copilot/concepts/agents/about-agent-skills)). 이 두 도구에서는 동작을 확인하지 않았습니다.
+
+확인: 2026-10-14, [Cursor skills](https://cursor.com/docs/skills), [Codex skills](https://developers.openai.com/codex/skills), [ChatGPT skills](https://learn.chatgpt.com/docs/build-skills.md).
+
+### ChatGPT 웹
+
+ChatGPT 웹은 단독 skill 업로드를 지원하지 않습니다(플러그인에 묶인 skill만 읽습니다). 대안으로 Projects의 지침에 `SKILL.md` 본문을 붙여 넣고 `references/` 아래 파일을 프로젝트 파일로 올리면 1·2·4단계와 3단계의 규칙은 쓸 수 있습니다. 변경률 스크립트는 실행할 수 없으므로 3단계의 변경률 게이트는 빠집니다. 확인: 2026-10-14, [ChatGPT skills](https://learn.chatgpt.com/docs/build-skills.md).
+
 ## 사용하기
 
-설치한 뒤에는 Claude가 남이 읽을 글을 쓰는 상황이라고 판단하면 skill을 불러옵니다. 직접 호출하고 싶다면 플러그인 설치 시 `/dadeumi:dadeumi`, 직접 복사 시 `/dadeumi`를 입력하면 됩니다.
+설치한 뒤에는 남이 읽을 글을 쓰는 상황이라고 판단하면 AI가 skill을 불러옵니다. 직접 호출하려면 위 설치 절의 호출 이름을 씁니다.
 
 ```
 /dadeumi 이번 분기 배포 일정 변경을 팀 채널에 공지할 글을 써 줘
@@ -71,9 +157,9 @@ Windows에서는 `python3` 대신 `python`으로 실행합니다.
 
 표·헤딩·불릿이 많은 문서는 `--ignore-markup`을 붙이면 마크다운 장식을 빼고 본문만 비교합니다.
 
-## 게시 전 자동 확인 hook (선택)
+## 게시 전 자동 확인 hook (Claude Code 전용, 선택)
 
-skill은 Claude가 필요하다고 판단할 때만 불려옵니다. 글을 올리는 도구를 호출하기 직전에 skill을 거쳤는지 강제로 확인하려면 `hooks/dadeumi-gate.js`를 hook으로 등록합니다.
+skill은 AI가 필요하다고 판단할 때만 불려옵니다. 글을 올리는 도구를 호출하기 직전에 skill을 거쳤는지 강제로 확인하려면 `hooks/dadeumi-gate.js`를 Claude Code hook으로 등록합니다.
 
 | 호출 | hook의 동작 |
 |---|---|
@@ -94,34 +180,43 @@ skill은 Claude가 필요하다고 판단할 때만 불려옵니다. 글을 올�
 2. `hooks/settings.example.json`의 `hooks` 항목을 `~/.claude/settings.json`에 합칩니다. 이미 `hooks`가 있으면 `PreToolUse`·`PostToolUse` 배열에 항목만 추가합니다.
 3. 첫 번째 `matcher`의 MCP 도구 이름을 자기 환경에 맞게 고칩니다. 예시는 `mcp-atlassian`의 Confluence·Jira 도구와 Slack 커넥터(`mcp__claude_ai_Slack__`) 이름이라, 쓰는 서버가 다르면 `/mcp`나 도구 목록에서 실제 이름(`mcp__<서버>__<도구>`)을 확인해 바꿔야 합니다. `gws`나 `gh`를 쓰지 않으면 두 번째 `matcher` 블록은 빼도 됩니다.
 
-Node.js만 있으면 되고 다른 의존성은 없습니다. 플러그인 skill은 `dadeumi:dadeumi`로 호출되는데, hook은 이 이름도 인식합니다.
+Node.js만 있으면 되고 다른 의존성은 없습니다. 플러그인 skill은 `dadeumi:dadeumi`로 호출되는데, hook은 이 이름도 인식합니다. 동작은 `tests/dadeumi-gate.test.js`로 검증합니다.
 
 ## 요구 사항
 
-- Claude Code
+- Claude Code, claude.ai·Claude 데스크톱, Cursor, Codex CLI, ChatGPT 데스크톱 중 하나
 - Python 3.7 이상 (변경률 스크립트용, 표준 라이브러리만 사용)
-- Node.js (hook을 쓸 때만)
+- Node.js (Claude Code에서 hook을 쓸 때만)
 
 ## 파일 구성
 
 ```
 skills/dadeumi/
 ├── SKILL.md                       # 흐름 전체와 등급 판정 기준
+├── agents/openai.yaml             # Codex·ChatGPT 데스크톱 목록 표시용
 ├── references/
 │   ├── 03-humanize.md             # 3단계 절차
 │   ├── im-not-ai/                 # AI 말투 규칙 (quick-rules, rewriting-playbook)
-│   └── toss/                      # 1·2·4단계 프롬프트와 핵심 원칙
+│   └── toss/                      # 1·2·4단계 프롬프트
 └── scripts/
     └── change_rate.py             # 변경률 게이트
 
 hooks/
-├── dadeumi-gate.js                # 게시 전 skill 호출 확인 hook (선택)
+├── dadeumi-gate.js                # 게시 전 skill 호출 확인 hook (Claude Code 전용, 선택)
 └── settings.example.json          # settings.json에 합칠 hook 설정 예시
+
+evals/                             # 발동 정확도 eval 케이스 (claude plugin eval)
+tests/                             # change_rate.py·dadeumi-gate.js 테스트, eval 기준선
+.github/workflows/                 # CI(테스트·검증)와 릴리스(zip 첨부)
 ```
+
+## 변경 이력
+
+[CHANGELOG.md](CHANGELOG.md)에 있습니다.
 
 ## 출처와 라이선스
 
-이 저장소의 코드와 문서는 MIT 라이선스를 따릅니다. 외부에서 가져온 파일에는 원래 라이선스가 적용됩니다.
+이 저장소는 MIT 라이선스([LICENSE](LICENSE))를 따릅니다. 가져온 파일의 저작자와 라이선스는 [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md)에, 가져온 범위와 바꾼 점은 각 폴더의 `NOTICE.md`에 있습니다.
 
 | 파일 | 출처 | 라이선스 |
 |---|---|---|
