@@ -1,6 +1,6 @@
 ---
 name: dadeumi
-description: 사용자 본인이 아닌 사람이 읽게 될 글을 쓰기 전에 사용 — 기준은 독자이고, 글이 나가는 도구·경로나 길이는 기준이 아니다. 문서 유형 정하기 → 정보 구조 만들기 → AI 말투 제거(윤문) → 문장 다듬기 순서를 거친다. 예 — Confluence·Jira·Slack 게시, Google Docs·메일(gws), README·개발 문서, 블로그, 레포트, 민원·탄원서, 카카오톡·문자 메시지. 게시 도구나 명령이 dadeumi-gate hook에 막혔을 때도 사용.
+description: 사용자 본인이 아닌 사람이 읽게 될 글을 쓰기 전에 사용 — 기준은 독자이고, 글이 나가는 도구·경로나 길이는 기준이 아니다. 문서 유형 정하기 → 정보 구조 만들기 → AI 말투 제거(윤문) → 문장 다듬기 순서를 거친다. 예 — Confluence·Jira·Slack 게시, Google Docs·메일(gws), README·개발 문서, 블로그, 레포트, 민원·탄원서, 카카오톡·문자 메시지.
 license: MIT
 compatibility: Python 3 표준 라이브러리와 셸(change_rate.py 실행용). hooks/는 Claude Code 전용.
 ---
