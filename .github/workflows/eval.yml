@@ -1,0 +1,63 @@
+name: eval
+
+# 발동·산출 eval. 저장소 secret ANTHROPIC_API_KEY가 있을 때만 돈다.
+# 케이스마다 Claude를 실제로 실행하므로 비용이 든다 (11케이스 × 3회, 상한 10 USD).
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "skills/**"
+      - "evals/**"
+      - ".github/workflows/eval.yml"
+
+jobs:
+  eval:
+    runs-on: ubuntu-latest
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Skip when ANTHROPIC_API_KEY is not set
+        id: key
+        run: |
+          if [ -z "$ANTHROPIC_API_KEY" ]; then
+            echo "::notice::ANTHROPIC_API_KEY secret is not set; skipping eval"
+            echo "present=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/setup-node@v4
+        if: steps.key.outputs.present == 'true'
+        with:
+          node-version: "22"
+
+      - run: npm i -g @anthropic-ai/claude-code
+        if: steps.key.outputs.present == 'true'
+
+      - name: claude plugin eval
+        if: steps.key.outputs.present == 'true'
+        run: |
+          mkdir -p evals/results
+          claude plugin eval . \
+            --trust-plugin \
+            --no-publish \
+            --ablation none \
+            --runs 3 \
+            --concurrency 4 \
+            --threshold 0.8 \
+            --max-cost-usd 10 \
+            --json evals/results/ci-result.json \
+            --report evals/results/ci-report.html
+
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.key.outputs.present == 'true'
+        with:
+          name: eval-results
+          path: |
+            evals/results/ci-result.json
+            evals/results/ci-report.html
+          if-no-files-found: ignore

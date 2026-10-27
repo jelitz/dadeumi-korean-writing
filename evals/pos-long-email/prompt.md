@@ -1,6 +1,6 @@
 ---
 allowed_tools: [Read, Skill]
-max_turns: 3
+max_turns: 8
 runs: 5
 tags: [trigger]
 ---

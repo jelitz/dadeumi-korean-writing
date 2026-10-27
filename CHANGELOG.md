@@ -4,6 +4,18 @@
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-10-27
+
+### Changed
+
+- SKILL.md: 1·2단계의 산출을 "구조 확인 메시지"로 정했다. 초안을 쓰기 전에 유형(또는 장르)·독자·목표 각 한 줄과 목차(제목·소제목·절 요지)를 한 메시지로 사용자에게 보이고 확인을 받은 뒤 초안을 쓴다. 이 메시지 없이 쓴 초안은 흐름을 거친 것으로 보지 않는다. 세션 기록 27건을 조사한 결과 3단계(윤문·변경률)는 대부분 실행되지만 1·2단계는 전체 흐름 글 20건 중 목차를 먼저 만든 것이 4건뿐이었다 — 3단계만 파일명·스크립트·exit 코드가 정해져 있고 1·2단계는 산출과 확인 지점이 없었기 때문이다.
+- SKILL.md: skill을 부른 뒤의 첫 행동은 1단계이며, 01-doc-type·02-structure를 먼저 읽고 3·4단계 참조는 구조가 확정된 뒤 읽는다. 호출 인자에 독자나 유형을 적는 것은 산출이 아니다.
+- SKILL.md 0절: 메모리·CLAUDE.md의 문서 형식 규칙은 2단계를 대신하는 것이 아니라 2단계의 입력이다. 목차는 그 형식의 틀을 채운 것으로 만들고, 기존 문서에 절 하나를 덧붙이는 글은 "형식: <출처>"와 절 요지 한 줄로 갈음한다.
+- SKILL.md "hook에 막혔을 때" 절을 세 갈래로 나눴다: 새로 쓴 문장이 없는 경우 / 초안을 이미 쓴 경우(사후 적용 절차) / 이미 흐름을 거친 글이 시간이 지나 다시 막힌 경우. 재호출이 "already loaded"로만 끝나면 인자를 채워 다시 부르거나 SKILL.md를 직접 읽는다.
+- `references/03-humanize.md`: 절차 앞에 선행조건(전체 흐름이면 구조 확인 메시지가 초안보다 먼저 나갔어야 함)을 넣었다.
+- evals: 전체 흐름 양성 케이스 5건(pos-readme, pos-confluence-techdoc, pos-long-email, pos-blog-post, pos-petition)에 grader 3개를 더했다 — `01-doc-type.md` Read, `02-structure.md` Read, 구조 확인 메시지가 본문보다 먼저 나오는지 보는 llm grader. 이 5건의 `max_turns`를 3에서 8로 올렸다.
+- GitHub Actions `eval.yml`: `claude plugin eval`을 수동 실행과 skills/·evals/ 변경 push에서 돌린다. 저장소 secret `ANTHROPIC_API_KEY`가 있을 때만 실행된다.
+
 ### Fixed
 
 - README: Slack 결과 예시가 초안의 "불가할 수 있습니다"를 "불가합니다"로 단정하고 "더 안정적인 배포를 기대한다"는 내용을 빠뜨린 것을 바로잡았다. 변경률을 다시 재서 36.3%에서 30.1%(본문만 35.0%에서 28.8%)로 고쳤다.
@@ -45,7 +57,8 @@
 
 - 첫 공개: `dadeumi` skill(문서 유형 정하기 → 정보 구조 만들기 → AI 말투 제거 → 문장 다듬기), 변경률 게이트 `scripts/change_rate.py`, 게시 전 확인 hook `hooks/dadeumi-gate.js`.
 
-[Unreleased]: https://github.com/jelitz/dadeumi-korean-writing/compare/v1.1.1...HEAD
+[Unreleased]: https://github.com/jelitz/dadeumi-korean-writing/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/jelitz/dadeumi-korean-writing/compare/v1.1.1...v1.2.0
 [1.1.1]: https://github.com/jelitz/dadeumi-korean-writing/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/jelitz/dadeumi-korean-writing/compare/c010690...v1.1.0
 [1.0.0]: https://github.com/jelitz/dadeumi-korean-writing/commit/c010690
